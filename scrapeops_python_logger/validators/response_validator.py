@@ -94,12 +94,13 @@ class ResponseValidator(object):
 
     @staticmethod
     def string_check(text, text_check, comparison, text_slice=None):
-        if text_slice is not None:
-            text = ResponseValidator.string_slice(text, text_slice)
-        if comparison == 'contains' and text_check in text:
-            return True
-        elif comparison == 'not_contain' and text_check not in text:
-            return True
+        if isinstance(text, str):
+            if text_slice is not None:
+                text = ResponseValidator.string_slice(text, text_slice)
+            if comparison == 'contains' and text_check in text:
+                return True
+            elif comparison == 'not_contain' and text_check not in text:
+                return True
         return False
 
 
