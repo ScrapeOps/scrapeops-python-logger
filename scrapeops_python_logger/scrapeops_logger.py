@@ -160,8 +160,7 @@ class ScrapeOpsLogger(SDKControllers, StatsLogger):
 
     def log_response(self, request_response_object=None):
         if self.sdk_enabled():
-            response= None ## remove
-            self.request_response_middleware.process(request_response_object, response) 
+            self.request_response_middleware.process(request_response_object) 
             self.generate_response_stats(request_response_object)
             
     

@@ -18,6 +18,8 @@ class BaseRequestResponse(object):
         self.raw_headers = None
         self.request_method = None
         self.bytes = None
+        self.body = None
+        self.json_response = None
  
         ## Proxy Checks
         self._active_proxy = None
@@ -52,6 +54,7 @@ class BaseRequestResponse(object):
         self._validation_test = None
         self._geo = None
         self._custom_tag = None 
+        self.json_response_keys = []
 
         ## Request Stats
         self.start_time = None
@@ -168,7 +171,31 @@ class BaseRequestResponse(object):
         return self.status_code
 
     def get_bytes(self):
-        return self.bytes
+        return self.bytes or 0
+    
+    def get_body(self):
+        return self.body or ''
+    
+    def get_json_response(self):
+        return self.json_response or {}
+
+    def has_response(self):
+        if self.body is not None or self.json_response is not None:
+            return True
+        return False
+    
+    def is_proxy_json_response(self):
+        if len(self.json_response_keys) > 0:
+            return True
+        return False
+
+    def is_json_response(self):
+        if len(self.json_response_keys) > 0 and self.json_response is not None:
+            return True
+        return False
+    
+    def get_json_response_keys(self):
+        return self.json_response_keys
         
 
 
@@ -331,6 +358,7 @@ class BaseRequestResponse(object):
         self._proxy_type = 'proxy_api'
         self._proxy_name = self._proxy_api_name = proxy_details.get('proxy_name')
         self._proxy_setup = self.proxy_api_setup(proxy_details) ## into new file
+        self.json_response_keys = proxy_details.get('json_response_keys', [])
 
 
     def proxy_api_setup(self, proxy_details):
@@ -455,7 +483,7 @@ class SOPSResponse(BaseRequestResponse):
         Normalised response data structure.
     """
 
-    def __init__(self, url=None, request=None, proxy_port=None, status_code=None, body=None, method=None, bytes=None):
+    def __init__(self, url=None, request=None, proxy_port=None, status_code=None, body=None, json_res=None, method=None, bytes=None):
         BaseRequestResponse.__init__(self)
         self.request = request
         self.get_finish_time()
@@ -467,6 +495,7 @@ class SOPSResponse(BaseRequestResponse):
         self.body = body
         self.request_method = method
         self.bytes = bytes
+        self.json_response = json_res
 
     
         
