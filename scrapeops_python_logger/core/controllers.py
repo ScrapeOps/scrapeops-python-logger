@@ -24,6 +24,7 @@ class SDKControllers(SDKSetup):
     def send_setup_request(self):
         data, status = SOPSRequest().setup_request(body=self.setup_data())
         if status.valid:
+            self._scrapeops_api_key_valid = True
             self.initialize_job_details(data)
         elif status.action == 'retry' and self._setup_attempts < SDKControllers.SETUP_ATTEMPT_LIMIT:
             self._setup_attempts += 1
@@ -90,6 +91,9 @@ class SDKControllers(SDKSetup):
 
     def deactivate_sdk(self, reason=None, error=None, request_type=None, data=None):
         self._sdk_active = False
+
+        deactivatedMessage = 'Scrapy SDK deactivated'
+        print(deactivatedMessage)
         if reason != 'scrapy_shell':
             self._error_logger.sdk_error_close(reason=reason, error=error, request_type=request_type)
 

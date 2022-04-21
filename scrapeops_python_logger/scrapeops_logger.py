@@ -69,9 +69,12 @@ class ScrapeOpsLogger(SDKControllers, StatsLogger):
         if self.check_api_key_present():
             self.initialize_SDK()
             self.send_setup_request()
-            self.spider_open_stats()
-            self.start_periodic_monitor()
-            atexit.register(self.close_sdk)
+            if self._scrapeops_api_key_valid:
+                self.spider_open_stats()
+                self.start_periodic_monitor()
+                atexit.register(self.close_sdk)
+            else:
+                print("ScrapeOps API Key Invalid")
         else:
             print("ScrapeOps API Key Missing or Incorrect")
             err = ScrapeOpsMissingAPIKey()

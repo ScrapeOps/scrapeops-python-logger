@@ -15,6 +15,7 @@ class BaseSDKModel(object):
 
         ## SDK Data
         self._sdk_active = None
+        self._scrapeops_api_key_valid = False
         self._scrapeops_endpoint = None
         self._period_frequency = 60 
         self._period_freq_list = None

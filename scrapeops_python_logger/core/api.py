@@ -137,6 +137,8 @@ class SOPSRequest(object):
     def setup_stats_validation(data, error):
         if data is None:
             return data, False, 'retry', str(error)
+        elif data is None and error == 'invalid_api_key':
+            return data, False, 'close', 'invalid_api_key'
         elif data.get('api_key') == 'invalid':
             return data, False, 'close', 'invalid_api_key'
         elif data.get('job_valid') is not True and data.get('job_id') is None:
