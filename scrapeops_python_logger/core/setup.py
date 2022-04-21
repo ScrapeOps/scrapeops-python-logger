@@ -46,6 +46,7 @@ class SDKSetup(SDKData):
         self.server_id= data.get('server_id')
         self.project_id= data.get('project_id')
         self.multi_server = data.get('multi_server', False)
+        SOPSRequest.HIGH_FREQ_ACC = data.get('high_freq', False)
         self._period_frequency = data.get('stats_period_frequency')
         self._period_freq_list = data.get('stats_period_freq_list')
         self.update_sdk_settings(data)

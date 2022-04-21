@@ -1,5 +1,5 @@
 import socket
-
+from scrapeops_scrapy.core.api import SOPSRequest
 
 
 class BaseSDKModel(object):
@@ -138,7 +138,9 @@ class SDKData(BaseSDKModel):
             'failed_urls_count': 0,
             'failed_urls_enabled': True,
             'job_custom_groups': self.job_custom_groups,
-            'error_details': self.tail.contents()
+            'error_details': self.tail.contents(),
+            'error_details_cumulative': self.tail.contents('cumulative'),
+            'high_freq': SOPSRequest.HIGH_FREQ_ACC
         }
 
         if stats_type == 'finished':

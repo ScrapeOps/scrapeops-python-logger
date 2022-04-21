@@ -2,6 +2,7 @@ import json
 import logging
 import sys
 
+from scrapeops_python_logger.core.api import SOPSRequest
 from scrapeops_python_logger.stats.model import OverallStatsModel, PeriodicStatsModel 
 from scrapeops_python_logger.utils import utils
 
@@ -11,14 +12,18 @@ class TailLogger(object):
 
     def __init__(self):
         self._log_dict = {}
-        self._log_handler = TailLogHandler(self._log_dict)
+        self._log_dict_cumulative = {}
+        self._log_handler = TailLogHandler(self._log_dict, self._log_dict_cumulative)
 
-    def contents(self):
-        jsonLogs = json.dumps(self._log_dict, indent= 2)
+    def contents(self, type = "diff"):
+        if(type == "cumulative"):
+            jsonLogsCumulative = json.dumps(self._log_dict_cumulative, indent= 2)
+            return jsonLogsCumulative
+        else:
+            jsonLogs = json.dumps(self._log_dict, indent= 2)
+            self._log_handler.flush()
+            return jsonLogs
 
-        self._log_handler.flush()
-
-        return jsonLogs
 
     @property
     def log_handler(self):
@@ -58,9 +63,10 @@ class TailLogHandler(logging.Handler):
         "Unknown Status",
     ]
 
-    def __init__(self, log_dict):
+    def __init__(self, log_dict, log_dict_cumulative):
         logging.Handler.__init__(self)
         self.log_dict = log_dict
+        self.log_dict_cumulative = log_dict_cumulative
 
 
     def flush(self):
@@ -135,6 +141,23 @@ class TailLogHandler(logging.Handler):
                         'message' : probableCause, 
                         'filepath': fileAndLine, 
                         'dateTime': dateTime
+                        }
+
+                if(SOPSRequest.HIGH_FREQ_ACC == True):
+
+                    if(errorMessage in self.log_dict_cumulative):
+                        self.log_dict_cumulative[errorMessage]['count'] = self.log_dict_cumulative[errorMessage]['count'] + 1
+                    else:
+
+                        self.log_dict_cumulative[errorMessage] =  {
+                            'type': type,
+                            'engine': engine,
+                            'name': errorMessage,
+                            'count': 1, 
+                            'traceback': traceback, 
+                            'message' : probableCause, 
+                            'filepath': fileAndLine, 
+                            'dateTime': dateTime
                         }
 
                         
