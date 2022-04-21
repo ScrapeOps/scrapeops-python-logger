@@ -74,6 +74,13 @@ class StatsLogger(OverallStatsModel, PeriodicStatsModel):
         method = request_response_object.get_request_method()
         status_code = request_response_object.get_status_code()
 
+        #if the request is not of type 2xx then log it in the failed urls array
+        if(str(request_response_object.get_status_code())[:1] != '2'):
+            self.failed_urls.append(request_response_object.get_raw_url())
+        else:
+            if request_response_object.get_raw_url() in self.failed_urls:
+                self.failed_urls.remove(request_response_object.get_raw_url())
+
         ## periodic stats
         self.check_periodic_stats()
         self.inc_value(PeriodicStatsModel._periodic_stats, f'responses|{method}|{proxy_name}|{proxy_setup}|{domain_name}|{page_type}|{status_code}|{validation}|{geo}|{custom_tag}|{custom_signal}|count')
