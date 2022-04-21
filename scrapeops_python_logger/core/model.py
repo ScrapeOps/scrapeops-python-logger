@@ -135,7 +135,7 @@ class SDKData(BaseSDKModel):
             'data_coverage': self.item_validation_middleware.get_item_coverage_data(),
             'invalid_items_count': self.item_validation_middleware.get_num_invalid_items(),
             'field_coverage': self.item_validation_middleware.get_field_coverage(),
-            'failed_urls_count': 0,
+            'failed_urls_count': len(self.failed_urls),
             'failed_urls_enabled': True,
             'job_custom_groups': self.job_custom_groups,
             'error_details': self.tail.contents(),
