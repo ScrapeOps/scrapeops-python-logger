@@ -1,5 +1,5 @@
 import socket
-from scrapeops_scrapy.core.api import SOPSRequest
+from scrapeops_python_logger.core.api import SOPSRequest
 
 
 class BaseSDKModel(object):
@@ -96,7 +96,7 @@ class SDKData(BaseSDKModel):
             'job_group_type': self.job_group_type, 
             'job_args': self.job_args,
             'job_start_time': self.start_time,
-            'sops_sdk': 'python',
+            'sops_sdk': 'python-requests',
             'sops_scrapeops_version': self._scrapeops_sdk_version,
             'sops_python_version': self._scrapeops_python_version,
             'sops_system_version': self._scrapeops_system_version,
@@ -157,7 +157,7 @@ class SDKData(BaseSDKModel):
             'job_group_name': self.job_group_name,
             'job_group_identifier': self.job_group_uuid,
             'spider_name': self.spider_name,
-            'sops_sdk': 'scrapy',
+            'sops_sdk': 'python-requests',
         }
 
     
@@ -175,7 +175,7 @@ class SDKData(BaseSDKModel):
             'sops_scrapeops_version': self._scrapeops_sdk_version,
             'sops_python_version': self._scrapeops_python_version,
             'sops_system_version': self._scrapeops_system_version,
-            'sops_sdk': 'python',
+            'sops_sdk': 'python-requests',
         }
 
     def get_job_name(self):

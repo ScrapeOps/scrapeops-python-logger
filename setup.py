@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 
-VERSION = '0.4.4'
+VERSION = '0.4.7'
 DESCRIPTION = 'Scrapeops Python Logger, is a library used by the ScrapeOps Python SDKs.'
 
 setup(name='scrapeops_python_logger',
