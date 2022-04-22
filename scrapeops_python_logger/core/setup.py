@@ -3,6 +3,7 @@ from scrapeops_python_logger.core.api import SOPSRequest
 from scrapeops_python_logger.normalizer.middleware import RequestResponseMiddleware  
 from scrapeops_python_logger.validators.item_validator import ItemValidator   
 from scrapeops_python_logger.core.model import SDKData
+from scrapeops_python_logger.core.error_logger import ErrorLogger
 
 
 
@@ -25,6 +26,9 @@ class SDKSetup(SDKData):
 
         ## Middlewares
         self.initialize_middlewares()
+        self.initialize_error_logger()
+
+        SOPSRequest.SCRAPEOPS_LOGGING_DATA = {'logging_data': self.logging_data()}
 
     
 
@@ -35,7 +39,12 @@ class SDKSetup(SDKData):
 
 
     def initialize_error_logger(self):
-        pass
+        self._error_logger = ErrorLogger(
+                        self.spider_name, 
+                        self.server_hostname, 
+                        self.server_ip,
+                        self.start_time,
+                        self.log_file)
         
 
     def initialize_job_details(self, data):

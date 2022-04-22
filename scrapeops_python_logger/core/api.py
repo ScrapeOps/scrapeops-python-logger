@@ -220,14 +220,7 @@ class SOPSRequest(object):
             proxies = {ProxyNormalizer.get_proxy_scheme(proxy): proxy}
         for _ in range(SOPSRequest.RETRY_LIMIT):
             try:
-                # print('IN THE RESPONSE PART')
-                # print('API KEY', SOPSRequest.API_KEY)
-                # print('URL', url)
-                # print('JSON BODY', body)
-
-
                 response = requests.post(url, json=body, timeout=SOPSRequest.TIMEOUT, files=files, proxies=proxies, headers={'api_key': SOPSRequest.API_KEY}) 
-                # print('response', response)
                 if response.status_code == 401:
                     return None, 'invalid_api_key'
                 if response.status_code == 200:
@@ -237,15 +230,12 @@ class SOPSRequest(object):
                     time.sleep(3)
                     raise ScrapeOpsAPIResponseError
             except requests.exceptions.ConnectionError as e:
-                print('e', e)
                 error = e
                 continue
             except ScrapeOpsAPIResponseError as e:
-                print('e', e)
                 error = e
                 continue
             except Exception as e:
-                print('e', e)
                 error = e
                 continue
         return None, str(error)

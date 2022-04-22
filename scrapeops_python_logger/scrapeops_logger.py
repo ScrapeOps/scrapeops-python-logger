@@ -6,7 +6,7 @@ from scrapeops_python_logger.core.error_logger import TailLogger
 from scrapeops_python_logger.stats.logger import StatsLogger
 from scrapeops_python_logger.normalizer.request_response import SOPSResponse
 from scrapeops_python_logger.stats.model import OverallStatsModel, PeriodicStatsModel
-from scrapeops_python_logger.exceptions import ScrapeOpsMissingAPIKey
+from scrapeops_python_logger.exceptions import ScrapeOpsMissingAPIKey, ScrapeOpsInvalidAPIKey
 from scrapeops_python_logger.utils import utils
 from scrapeops_python_logger.core.api import SOPSRequest
 
@@ -75,6 +75,8 @@ class ScrapeOpsLogger(SDKControllers, StatsLogger):
                 atexit.register(self.close_sdk)
             else:
                 print("ScrapeOps API Key Invalid")
+                err = ScrapeOpsInvalidAPIKey()
+                self.deactivate_sdk(reason='invalid_api_key', error=err)
         else:
             print("ScrapeOps API Key Missing or Incorrect")
             err = ScrapeOpsMissingAPIKey()
